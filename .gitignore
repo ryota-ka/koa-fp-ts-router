@@ -1,0 +1,4 @@
+/koa-fp-ts-router-*.tgz
+/lib
+/node_modules
+yarn-error.log

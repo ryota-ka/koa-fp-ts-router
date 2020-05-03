@@ -1,0 +1,35 @@
+{
+  "name": "koa-fp-ts-router",
+  "version": "0.1.0",
+  "description": "A Koa router middleware built on the top of fp-ts-routing",
+  "main": "cjs/index.js",
+  "module": "mjs/index.js",
+  "types": "cjs/index.d.ts",
+  "repository": "https://github.com/ryota-ka/koa-fp-ts-router",
+  "author": "Ryota Kameoka <kameoka.ryota@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "fp-ts": "^2.5.4",
+    "fp-ts-routing": "^0.5.3",
+    "koa": "^2.11.0",
+    "koa-compose": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/koa": "^2.11.3",
+    "@types/koa-compose": "^3.2.5",
+    "@types/supertest": "^2.0.8",
+    "fp-ts": "^2.5.4",
+    "fp-ts-routing": "^0.5.3",
+    "io-ts": "^2.2.1",
+    "jest": "^25.5.1",
+    "koa": "^2.11.0",
+    "koa-compose": "^4.1.0",
+    "prettier": "^2.0.5",
+    "rollup": "^2.7.6",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3"
+  }
+}
