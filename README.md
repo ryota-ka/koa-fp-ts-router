@@ -1,5 +1,7 @@
 # koa-fp-ts-router
 
+![npm](https://img.shields.io/npm/v/koa-fp-ts-router)
+
 A [Koa](https://koajs.com/) router middleware built on the top of [`fp-ts-routing`](https://www.npmjs.com/package/fp-ts-routing).
 
 ## Installation
