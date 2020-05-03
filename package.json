@@ -8,6 +8,14 @@
   "repository": "https://github.com/ryota-ka/koa-fp-ts-router",
   "author": "Ryota Kameoka <kameoka.ryota@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "fp-ts",
+    "fp-ts-routing",
+    "koa",
+    "koajs",
+    "middleware",
+    "router"
+  ],
   "peerDependencies": {
     "fp-ts": "^2.5.4",
     "fp-ts-routing": "^0.5.3",
