@@ -5,7 +5,13 @@ import { parse, Route, zero, Match, Parser, format } from 'fp-ts-routing';
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'PUT';
 
+export interface Options {
+    basePath: string;
+}
+
 export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
+    #options: Partial<Options> | undefined;
+
     private readonly middlewares: Array<
         Middleware<StateT, CustomT & { params: unknown }>
     > = [];
@@ -15,7 +21,8 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
         Parser<Middleware<StateT, Context & CustomT & { params: any }>>
     >;
 
-    public constructor() {
+    public constructor(options: Partial<Options> = {}) {
+        this.#options = options;
         this.parsers = {
             DELETE: zero(),
             GET: zero(),
@@ -164,11 +171,15 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
         f: (a: A) => B,
         code: number = 302
     ): void {
+        const basePath = this.#options?.basePath;
+
         this.all(src, function (ctx) {
             const params = f(ctx.params);
             const path = format(dest.formatter, params);
 
-            ctx.redirect(path);
+            ctx.redirect(
+                basePath === undefined ? path : basePath + path.slice(1)
+            );
             ctx.status = code;
         });
     }

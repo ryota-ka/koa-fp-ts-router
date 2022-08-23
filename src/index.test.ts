@@ -155,6 +155,84 @@ describe(Router, () => {
         });
     });
 
+    describe(Router.prototype.redirect, () => {
+        describe('w/o base path', () => {
+            let server: Server;
+
+            beforeAll(() => {
+                const app = new Koa();
+
+                // matches
+                const oldUser = str('userID').then(end);
+                const newUser = lit('users').then(str('id')).then(end);
+
+                // routes
+                const router = new Router();
+
+                router.redirect(oldUser, newUser, ({ userID }) => ({
+                    id: userID,
+                }));
+
+                app.use(router.routes());
+
+                server = app.listen();
+            });
+
+            afterAll((done) => {
+                server.close(done);
+            });
+
+            describe('GET /john', () => {
+                it('returns 302', async () => {
+                    await request(server)
+                        .get('/john')
+                        .redirects(0)
+                        .expect(302)
+                        .expect('Location', '/users/john');
+                });
+            });
+        });
+
+        describe('w/ base path', () => {
+            let server: Server;
+
+            beforeAll(() => {
+                const app = new Koa();
+
+                // matches
+                const oldUser = str('userID').then(end);
+                const newUser = lit('users').then(str('id')).then(end);
+
+                // routes
+                const router = new Router({
+                    basePath: '/admin/',
+                });
+
+                router.redirect(oldUser, newUser, ({ userID }) => ({
+                    id: userID,
+                }));
+
+                app.use(router.routes());
+
+                server = app.listen();
+            });
+
+            afterAll((done) => {
+                server.close(done);
+            });
+
+            describe('GET /john', () => {
+                it('returns 302', async () => {
+                    await request(server)
+                        .get('/john')
+                        .redirects(0)
+                        .expect(302)
+                        .expect('Location', '/admin/users/john');
+                });
+            });
+        });
+    });
+
     describe(Router.prototype.use, () => {
         let server: Server;
 
