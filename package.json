@@ -6,7 +6,7 @@
   "module": "mjs/index.js",
   "types": "cjs/index.d.ts",
   "repository": "https://github.com/ryota-ka/koa-fp-ts-router",
-  "author": "Ryota Kameoka <kameoka.ryota@gmail.com>",
+  "author": "Ryota Kameoka <ok@ryota-ka.me>",
   "license": "MIT",
   "keywords": [
     "fp-ts",
