@@ -46,14 +46,9 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
             /**
              * A list of allowed methods on this endpoint
              */
-            const allowedMethods = ([
-                'DELETE',
-                'GET',
-                'HEAD',
-                'PATCH',
-                'POST',
-                'PUT',
-            ] as const).filter((m) => {
+            const allowedMethods = (
+                ['DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT'] as const
+            ).filter((m) => {
                 const parser = this.parsers[m];
                 const route = Route.parse(ctx.path);
 
