@@ -1,6 +1,6 @@
 {
   "name": "koa-fp-ts-router",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "A Koa router middleware built on the top of fp-ts-routing",
   "main": "cjs/index.js",
   "module": "mjs/index.js",
