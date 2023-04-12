@@ -1,5 +1,5 @@
 import Koa from 'koa';
-import { Middleware, Next, Context, ParameterizedContext } from 'koa';
+import { Middleware, Next, ParameterizedContext } from 'koa';
 import compose from 'koa-compose';
 import { parse, Route, zero, Match, Parser, format } from 'fp-ts-routing';
 
@@ -18,7 +18,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
 
     private readonly parsers: Record<
         Exclude<Method, 'OPTIONS'>,
-        Parser<Middleware<StateT, Context & CustomT & { params: any }>>
+        Parser<Middleware<StateT, CustomT & { params: any }>>
     >;
 
     public constructor(options: Partial<Options> = {}) {
@@ -38,11 +38,8 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
      * an `Allow` header containing the allowed methods, as well as responding
      * with `405 Method Not Allowed` and `501 Not Implemented` as appropriate.
      */
-    public allowedMethods(): Middleware<StateT, Context & CustomT> {
-        return async (
-            ctx: ParameterizedContext<StateT, CustomT>,
-            next: Next
-        ): Promise<void> => {
+    public allowedMethods(): Middleware<StateT, CustomT> {
+        return async (ctx, next) => {
             const method = this.parseMethod(ctx.method);
 
             if (method === null) {
@@ -82,14 +79,8 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
         };
     }
 
-    public routes(): Middleware<
-        StateT,
-        Context & CustomT & { params: unknown }
-    > {
-        return (
-            ctx: ParameterizedContext<StateT, CustomT & { params: unknown }>,
-            next: Next
-        ): any => {
+    public routes(): Middleware<StateT, CustomT & { params: unknown }> {
+        return (ctx, next) => {
             const method = this.parseMethod(ctx.method);
 
             // OPTIONS method is not supported by this middleware
@@ -116,7 +107,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
      */
     public delete<Params>(
         match: Match<Params>,
-        middleware: Middleware<StateT, Context & CustomT & { params: Params }>
+        middleware: Middleware<StateT, CustomT & { params: Params }>
     ): void {
         this.register('DELETE', match, middleware);
     }
@@ -126,7 +117,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
      */
     public get<Params>(
         match: Match<Params>,
-        middleware: Middleware<StateT, Context & CustomT & { params: Params }>
+        middleware: Middleware<StateT, CustomT & { params: Params }>
     ): void {
         this.register('GET', match, middleware);
         this.register('HEAD', match, middleware);
@@ -137,7 +128,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
      */
     public patch<Params>(
         match: Match<Params>,
-        middleware: Middleware<StateT, Context & CustomT & { params: Params }>
+        middleware: Middleware<StateT, CustomT & { params: Params }>
     ): void {
         this.register('PATCH', match, middleware);
     }
@@ -147,7 +138,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
      */
     public post<Params>(
         match: Match<Params>,
-        middleware: Middleware<StateT, Context & CustomT & { params: Params }>
+        middleware: Middleware<StateT, CustomT & { params: Params }>
     ): void {
         this.register('POST', match, middleware);
     }
@@ -157,7 +148,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
      */
     public put<Params>(
         match: Match<Params>,
-        middleware: Middleware<StateT, Context & CustomT & { params: Params }>
+        middleware: Middleware<StateT, CustomT & { params: Params }>
     ): void {
         this.register('PUT', match, middleware);
     }
@@ -193,7 +184,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
 
     private all<Params>(
         match: Match<Params>,
-        middleware: Middleware<StateT, Context & CustomT & { params: Params }>
+        middleware: Middleware<StateT, CustomT & { params: Params }>
     ): void {
         (['DELETE', 'GET', 'PATCH', 'POST', 'PUT'] as const).forEach(
             (method) => {
@@ -214,7 +205,7 @@ export class Router<StateT = Koa.DefaultState, CustomT = Koa.DefaultContext> {
     private register<Params>(
         method: Exclude<Method, 'OPTIONS'>,
         match: Match<Params>,
-        middleware: Middleware<StateT, Context & CustomT & { params: Params }>
+        middleware: Middleware<StateT, CustomT & { params: Params }>
     ): void {
         const parser = match.parser.map(
             (params: Params) =>
